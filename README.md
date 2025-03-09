@@ -18,9 +18,15 @@ Source : SIGMA Rules
 SELECT UTF8(payload) as search_payload from events where (((LOGSOURCETYPENAME(devicetype) ilike 'Microsoft Windows Security Event Log')) and (("EventID"='4688' and (search_payload ilike '%\cmd.exe' or search_payload ilike '%\powershell.exe' or search_payload ilike '%\wscript.exe' or search_payload ilike '%\cscript.exe'or search_payload ilike '%\sh.exe' or search_payload ilike '%\bash.exe' or search_payload ilike '%\scrcons.exe' or search_payload ilike '%\schtasks.exe' or search_payload ilike '%\regsvr32.exe' or search_payload ilike '%\mshta.exe' or search_payload ilike '%\rundll32.exe' or search_payload ilike '%\msiexec.exe')))) GROUP BY sourceip LAST 3 DAYS
 ```
 
-## 3. Potential DNS Tunneling
+## 4. Potential DNS Tunneling 
 Source : N/A
 ```sql
-SELECT LOGSOURCENAME(logsourceid),sourceip, destinationip, "<dns_url_query_field_name>","DNS Error Code",STRLEN("<dns_url_query_field_name>") FROM events WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%<name_of_logsource>%' AND STRLEN("<dns_url_query_field_name>")>250 AND NOT INCIDR('192.X.X.0/20',sourceip) AND "<dns_url_query_field_name>" IS NOT NULL AND "<dns_url_query_field_name>" NOT ILIKE '%<excluded_url_1>%' AND "URL Host" NOT ILIKE '%<excluded_url_2>%' START PARSEDATETIME('8 day ago')
+SELECT LOGSOURCENAME(logsourceid),sourceip, destinationip, "<dns_url_query_field_name>","DNS Error Code",STRLEN("<dns_url_query_field_name>") FROM events WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%<DNS_logsource>%' AND STRLEN("<dns_url_query_field_name>")>250 AND NOT INCIDR('192.X.X.0/20',sourceip) AND "<dns_url_query_field_name>" IS NOT NULL AND "<dns_url_query_field_name>" NOT ILIKE '%<excluded_url_1>%' AND "<dns_url_query_field_name>" NOT ILIKE '%<excluded_url_2>%' START PARSEDATETIME('8 day ago')
+```
+
+## 5. Explicit Credential - Windows 
+Source : N/A
+```sql
+SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(logsourceid) AS "LogSource Name",QIDNAME(qid) As "Event Name" ,"Process Name",sourceip AS "Source IP",sourceport AS "Source Port",destinationip AS "Destination IP",destinationport AS "Destination Port",username AS "Username","Account Name" AS "Account Name" FROM events WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows%' AND qidEventId=4648 AND username!="Account Name" AND username NOT LIKE '%$' AND "Account Name" NOT LIKE '%$' AND username!='-' AND "Account Name"!='-' AND username IS NOT NULL AND "Account Name" IS NOT NULL AND username NOT IN ('1st_username_exclusion') AND username NOT IN ('2nd_username_exclusion') START PARSEDATETIME('1 day ago')
 ```
 
