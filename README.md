@@ -18,3 +18,9 @@ Source : SIGMA Rules
 SELECT UTF8(payload) as search_payload from events where (((LOGSOURCETYPENAME(devicetype) ilike 'Microsoft Windows Security Event Log')) and (("EventID"='4688' and (search_payload ilike '%\cmd.exe' or search_payload ilike '%\powershell.exe' or search_payload ilike '%\wscript.exe' or search_payload ilike '%\cscript.exe'or search_payload ilike '%\sh.exe' or search_payload ilike '%\bash.exe' or search_payload ilike '%\scrcons.exe' or search_payload ilike '%\schtasks.exe' or search_payload ilike '%\regsvr32.exe' or search_payload ilike '%\mshta.exe' or search_payload ilike '%\rundll32.exe' or search_payload ilike '%\msiexec.exe')))) GROUP BY sourceip LAST 3 DAYS
 ```
 
+## 3. Potential DNS Tunneling
+Source : N/A
+```sql
+SELECT LOGSOURCENAME(logsourceid),sourceip, destinationip, "<dns_url_query_field_name>","DNS Error Code",STRLEN("<dns_url_query_field_name>") FROM events WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%<name_of_logsource>%' AND STRLEN("<dns_url_query_field_name>")>250 AND NOT INCIDR('192.X.X.0/20',sourceip) AND "<dns_url_query_field_name>" IS NOT NULL AND "<dns_url_query_field_name>" NOT ILIKE '%<excluded_url_1>%' AND "URL Host" NOT ILIKE '%<excluded_url_2>%' START PARSEDATETIME('8 day ago')
+```
+
