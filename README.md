@@ -30,3 +30,14 @@ Source : N/A
 SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(logsourceid) AS "LogSource Name",QIDNAME(qid) As "Event Name" ,"Process Name",sourceip AS "Source IP",sourceport AS "Source Port",destinationip AS "Destination IP",destinationport AS "Destination Port",username AS "Username","Account Name" AS "Account Name" FROM events WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows%' AND qidEventId=4648 AND username!="Account Name" AND username NOT LIKE '%$' AND "Account Name" NOT LIKE '%$' AND username!='-' AND "Account Name"!='-' AND username IS NOT NULL AND "Account Name" IS NOT NULL AND username NOT IN ('1st_username_exclusion') AND username NOT IN ('2nd_username_exclusion') START PARSEDATETIME('1 day ago')
 ```
 
+## 6. Inbound RDP Connection - Firewall
+Source : N/A
+```sql
+SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(logsourceid) AS "LogSource Name",QIDNAME(qid) As "Event Name" ,"Logon Process" AS "Logon Process","Process Name",sourceip AS "Source IP",sourceport AS "Source Port",destinationip AS "Destination IP",destinationport AS "Destination Port",username AS "Username","Account Name" AS "Account Name", "Logon Type" AS "Logon Type" ,qideventid AS "Event ID"  FROM events WHERE (LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_2%' OR LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_2%')  AND  NOT (sourceIP BETWEEN '10.0.0.0' AND '10.255.255.255') AND NOT (sourceIP BETWEEN '172.16.0.0' AND '172.31.255.255') AND NOT ( destinationip BETWEEN '192.168.0.0' AND '192.168.255.255') AND destinationport=3389  START PARSEDATETIME('20 days ago')
+```
+
+## 7. Outbound RDP Connection - Firewall
+Source : N/A
+```sql
+SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(logsourceid) AS "LogSource Name",QIDNAME(qid) As "Event Name" ,"Logon Process" AS "Logon Process","Process Name",destinationip AS "Source IP",sourceport AS "Source Port",destinationip AS "Destination IP",destinationport AS "Destination Port",username AS "Username","Account Name" AS "Account Name", "Logon Type" AS "Logon Type" ,qideventid AS "Event ID"  FROM events WHERE (LOGSOURCETYPENAME(deviceType) ILIKE '%Fortinet Fortigate Security Gateway%' OR LOGSOURCETYPENAME(deviceType) ILIKE '%Palo Alto PA Series%')  AND  NOT (destinationip BETWEEN '10.0.0.0' AND '10.255.255.255') AND NOT (destinationip BETWEEN '172.16.0.0' AND '172.31.255.255') AND NOT ( destinationip BETWEEN '192.168.0.0' AND '192.168.255.255') AND destinationport=3389  START PARSEDATETIME('20 days ago')
+```
