@@ -42,6 +42,12 @@ SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(lo
 ## 6. Inbound RDP Connection - Firewall
 Source : N/A <br />
 **Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Firewall_Type_Name_1` | Add your 1st Firewall logsource_type name here  |
+| `Firewall_Type_Name_2` | Add your 2nd Firewall logsource_type name here  |
+| `(sourceIP BETWEEN '10.0.0.0' AND '10.255.255.255'),(sourceIP BETWEEN '172.16.0.0' AND '172.31.255.255'),<br />( destinationip BETWEEN '192.168.0.0' AND '192.168.255.255')` | Private IP Range  |
 ```sql
 SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(logsourceid) AS "LogSource Name",QIDNAME(qid) As "Event Name" ,"Logon Process" AS "Logon Process","Process Name",sourceip AS "Source IP",sourceport AS "Source Port",destinationip AS "Destination IP",destinationport AS "Destination Port",username AS "Username","Account Name" AS "Account Name", "Logon Type" AS "Logon Type" ,qideventid AS "Event ID"  FROM events WHERE (LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_1%' OR LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_2%')  AND  NOT (sourceIP BETWEEN '10.0.0.0' AND '10.255.255.255') AND NOT (sourceIP BETWEEN '172.16.0.0' AND '172.31.255.255') AND NOT ( destinationip BETWEEN '192.168.0.0' AND '192.168.255.255') AND destinationport=3389  START PARSEDATETIME('20 days ago')
 ```
@@ -49,8 +55,11 @@ SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(lo
 ## 7. Outbound RDP Connection - Firewall
 Source : N/A <br />
 **Author** : *Abrar Hussain* <br />
-Firewall_Type_Name_1 => Add your 1st Firewall logsource_type name here <br />
-Firewall_Type_Name_2 => Add your 2nd Firewall logsource_type name here <br />
+| Parameters | Description |
+| --- | --- |
+| `Firewall_Type_Name_1` | Add your 1st Firewall logsource_type name here  |
+| `Firewall_Type_Name_2` | Add your 2nd Firewall logsource_type name here  |
+
 ```sql
 SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(logsourceid) AS "LogSource Name",QIDNAME(qid) As "Event Name" ,"Logon Process" AS "Logon Process","Process Name",destinationip AS "Source IP",sourceport AS "Source Port",destinationip AS "Destination IP",destinationport AS "Destination Port",username AS "Username","Account Name" AS "Account Name", "Logon Type" AS "Logon Type" ,qideventid AS "Event ID"  FROM events WHERE (LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_1%' OR LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_2%')  AND  NOT (destinationip BETWEEN '10.0.0.0' AND '10.255.255.255') AND NOT (destinationip BETWEEN '172.16.0.0' AND '172.31.255.255') AND NOT ( destinationip BETWEEN '192.168.0.0' AND '192.168.255.255') AND destinationport=3389  START PARSEDATETIME('20 days ago')
 ```
@@ -58,9 +67,11 @@ SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(lo
 ## 8. Outbound RDP Connection - Firewall
 Source : N/A <br />
 **Author** : *Abrar Hussain* <br />
-DNS_LOGSOUREC_NAME => Add your DNS logsource_type name here <br />
+| Parameters | Description |
+| --- | --- |
+| `DNS_LOGSOURECE_TYPE_NAME` | Add your DNS logsource_type name here  |
 ```sql
-SELECT LOGSOURCENAME(logsourceid),sourceip, destinationip,"Requested Query" AS "DNS Query","DNS Request Type" AS "DNS Record Type", "Protocol Name" AS "Protocol", "Error Code" AS "Query Status"  FROM events WHERE (LOGSOURCENAME(logsourceid)) ILIKE '%DNS_LOGSOUREC_NAME%' AND "Query Response Status" ILIKE '%NOERROR%' AND "DNS Request Type" ILIKE '%AXFR%' START PARSEDATETIME('8 day ago')
+SELECT LOGSOURCENAME(logsourceid),sourceip, destinationip,"Requested Query" AS "DNS Query","DNS Request Type" AS "DNS Record Type", "Protocol Name" AS "Protocol", "Error Code" AS "Query Status"  FROM events WHERE (LOGSOURCENAME(logsourceid)) ILIKE '%DNS_LOGSOURECE_TYPE_NAME%' AND "Query Response Status" ILIKE '%NOERROR%' AND "DNS Request Type" ILIKE '%AXFR%' START PARSEDATETIME('8 day ago')
 
 ```
 
