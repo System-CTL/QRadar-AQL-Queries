@@ -74,5 +74,20 @@ Source : N/A <br />
 SELECT LOGSOURCENAME(logsourceid),sourceip, destinationip,"Requested Query" AS "DNS Query","DNS Request Type" AS "DNS Record Type", "Protocol Name" AS "Protocol", "Error Code" AS "Query Status"  FROM events WHERE (LOGSOURCENAME(logsourceid)) ILIKE '%DNS_LOGSOURECE_TYPE_NAME%' AND "Query Response Status" ILIKE '%NOERROR%' AND "DNS Request Type" ILIKE '%AXFR%' START PARSEDATETIME('8 day ago')
 
 ```
+## 9. Svchost.exe Abused - Process Path 
+Source : N/A <br />
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Log` | Add your Microsoft Windows Security logsource_type name here  |
+
+**Expected Path**: *C:\Windows\System32\svchost.exe* <br />
+
+```sql
+
+SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm'),"qidEventId" as 'Event ID',"Process Name",destinationport,username,"Account Name",LOGSOURCENAME(logsourceid),sourceip, destinationip, "Process Path" FROM events WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows Log%' AND qidEventId=4688 AND "Process Name" ILIKE '%svchost.exe%' GROUP BY "Process Path" START PARSEDATETIME('8 day ago')
+```
+
 
 
