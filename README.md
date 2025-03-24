@@ -47,9 +47,9 @@ Source : N/A <br />
 | --- | --- |
 | `Firewall_Type_Name_1` | Add your 1st Firewall logsource_type name here  |
 | `Firewall_Type_Name_2` | Add your 2nd Firewall logsource_type name here  |
-| <ul><li>(sourceIP BETWEEN '10.0.0.0' AND '10.255.255.255')</li><li>(sourceIP BETWEEN '172.16.0.0' AND '172.31.255.255')</li><li>( destinationip BETWEEN '192.168.0.0' AND '192.168.255.255')</li></ul> | Private IP Range  |
+| <ul><li>(sourceIP BETWEEN '10.0.0.0' AND '10.255.255.255')</li><li>(sourceIP BETWEEN '172.16.0.0' AND '172.31.255.255')</li><li>( sourceIP BETWEEN '192.168.0.0' AND '192.168.255.255')</li></ul> | Private IP Range  |
 ```sql
-SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(logsourceid) AS "LogSource Name",QIDNAME(qid) As "Event Name" ,"Logon Process" AS "Logon Process","Process Name",sourceip AS "Source IP",sourceport AS "Source Port",destinationip AS "Destination IP",destinationport AS "Destination Port",username AS "Username","Account Name" AS "Account Name", "Logon Type" AS "Logon Type" ,qideventid AS "Event ID"  FROM events WHERE (LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_1%' OR LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_2%')  AND  NOT (sourceIP BETWEEN '10.0.0.0' AND '10.255.255.255') AND NOT (sourceIP BETWEEN '172.16.0.0' AND '172.31.255.255') AND NOT ( destinationip BETWEEN '192.168.0.0' AND '192.168.255.255') AND destinationport=3389  START PARSEDATETIME('20 days ago')
+SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(logsourceid) AS "LogSource Name",QIDNAME(qid) As "Event Name" ,"Logon Process" AS "Logon Process","Process Name",sourceip AS "Source IP",sourceport AS "Source Port",destinationip AS "Destination IP",destinationport AS "Destination Port",username AS "Username","Account Name" AS "Account Name", "Logon Type" AS "Logon Type" ,qideventid AS "Event ID"  FROM events WHERE (LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_1%' OR LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_2%')  AND  NOT (sourceIP BETWEEN '10.0.0.0' AND '10.255.255.255') AND NOT (sourceIP BETWEEN '172.16.0.0' AND '172.31.255.255') AND NOT ( sourceIP BETWEEN '192.168.0.0' AND '192.168.255.255') AND destinationport=3389  START PARSEDATETIME('20 days ago')
 ```
 
 ## 7. Outbound RDP Connection - Firewall
