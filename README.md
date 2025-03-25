@@ -113,5 +113,13 @@ SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm'),"qidEventId" as 'Event ID',"Pro
 ```
 
 
+## 🛠 Usage
+
+1. Copy the desired AQL query
+2. Paste into QRadar's Ariel Query interface
+3. Adjust time ranges and parameters as needed
+4. Export results for further analysis
+
+
 
 
