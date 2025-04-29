@@ -1,8 +1,23 @@
-Technique Name	Archive Collected Data
-Technique ID	T1560
-Sub-Technique Name	Archive via Utility
-Sub-Technique ID	T1560.001
-MITRE Tactics	Collection
-MITRE Data Sources	Process
-Command
-File
+## 1. T1560.001 - Archive Collected Data
+#Persistence Case
+Source : N/A
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Technique Name` | Archive Collected Data |
+| `Technique ID` | T1560 |
+| `Sub-Technique Name` | T1560.001 |
+| `MITRE Tactics` | Collection |
+| `MITRE Data Sources` | Process,Command,File |
+
+##Self Extracting Archives - Persistence Case
+```sql
+SELECT * FROM events WHERE ((LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows Security Event Log%'AND (qidEventId=4688 OR qidEventId=4663 )  AND ( "Command" ILIKE 'programs/startup' OR "Object Name" ILIKE 'programs/startup' ) ) LAST 3 DAYS
+```
+
+##LOLBIN Archiving Tools Execution Case
+```sql
+SELECT * FROM events WHERE ((LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows Security Event Log%'AND qidEventId=4688  AND ("Process Name" ILIKE 'makecab'  OR "Process Name" ILIKE 'compact') OR ( "Command" ILIKE '.zip' OR "Command" ILIKE '\c' OR "Command" ILIKE '\s' OR "Command" ILIKE '-v' OR "Command" ILIKE '*' OR "Command" ILIKE '.cab' OR "Command" ILIKE '.7zip' ) ) LAST 3 DAYS
+```
+
