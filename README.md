@@ -112,6 +112,43 @@ Source : N/A <br />
 SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm'),"qidEventId" as 'Event ID',"Process Name",destinationport,username,"Account Name",LOGSOURCENAME(logsourceid),sourceip, destinationip, "Process Path","Parent Process Name" FROM events WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows%' AND qidEventId=4688 AND "Process Name" ILIKE '%svchost.exe%' AND "Parent Process Name" NOT ILIKE '%Services.exe%' AND "Parent Process Name" IS NOT NULL AND "Parent Process Name" NOT ILIKE '%MsMpEng.exe%' START PARSEDATETIME('7 day ago')
 ```
 
+## 11. Default Account Enabled  
+Source : N/A <br />
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
+
+```sql
+SELECT * FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
+AND qidEventId = 4722 
+AND (username ILIKE 'guest' OR username ILIKE 'defaultaccount' OR username ILIKE 'administrator')) 
+LAST 15 DAYS
+```
+## 12. Default Account Enabled - Command Line
+Source : N/A <br />
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
+
+```sql
+SELECT * FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
+AND qidEventId = 4688 
+AND ("Command" ILIKE 'active' or "Command" ILIKE 'Enabled' or "Command" ILIKE 'set' or "Command" ILIKE 'disabled' )) 
+LAST 5 DAYS
+```
+
+
+
+
+
+
+
 
 ## 🛠 Usage
 
