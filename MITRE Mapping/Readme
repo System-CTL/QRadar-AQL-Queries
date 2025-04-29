@@ -1,0 +1,8 @@
+Technique Name	Archive Collected Data
+Technique ID	T1560
+Sub-Technique Name	Archive via Utility
+Sub-Technique ID	T1560.001
+MITRE Tactics	Collection
+MITRE Data Sources	Process
+Command
+File
