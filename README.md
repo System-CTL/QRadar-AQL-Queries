@@ -159,7 +159,22 @@ AND ("Command" ILIKE 'create' or "Command" ILIKE '/SC' or "Command" ILIKE '/TN' 
 LAST 5 DAYS
 ```
 
+## 13. BITSadmin - Command Line
+Source : N/A <br />
+**Author** : *Abrar Hussain* <br />
 
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
+
+```sql
+
+SELECT * FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
+AND qidEventId = 4688 
+AND ("Command" ILIKE '/transfer' or "Command" ILIKE '/priority' or "Command" ILIKE '/download' )) 
+LAST 5 DAYS
+```
 
 ## 🛠 Usage
 
