@@ -143,10 +143,21 @@ AND ("Command" ILIKE 'active' or "Command" ILIKE 'Enabled' or "Command" ILIKE 's
 LAST 5 DAYS
 ```
 
+## 13. Scheduled Task - Command Line
+Source : N/A <br />
+**Author** : *Abrar Hussain* <br />
 
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
 
-
-
+```sql
+SELECT * FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
+AND qidEventId = 4688 
+AND ("Command" ILIKE 'create' or "Command" ILIKE '/SC' or "Command" ILIKE '/TN' )) 
+LAST 5 DAYS
+```
 
 
 
