@@ -185,9 +185,9 @@ Source : N/A <br />
 | `DNS_Request_Type` | DNS Record Types e.g. TXT, AAAA, CNAME  |
 
 ```sql
-SELECT BASE64(payload), *
+SELECT *
 FROM events
-WHERE LOGSOURCETYPENAME(devicetype) ILIKE '%DNS_logsource_type%' AND "DNS_Request_Type" ILIKE 'TXT' LAST 5 DAYS
+WHERE LOGSOURCETYPENAME(devicetype) ILIKE '%DNS_logsource_type%' AND "DNS_Request_Type" ILIKE 'TXT' AND BASE64(payload)=TRUE LAST 5 DAYS 
 ```
 
 
