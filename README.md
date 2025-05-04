@@ -175,6 +175,21 @@ AND qidEventId = 4688
 AND ("Command" ILIKE '/transfer' or "Command" ILIKE '/priority' or "Command" ILIKE '/download' )) 
 LAST 5 DAYS
 ```
+## 15. Potential DNS Tunneling - Base64 Encoding
+Source : N/A <br /> 
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `DNS_logsource_type` | Add your DNS logsource_type name here  |
+| `DNS_Request_Type` | DNS Record Types e.g. TXT, AAAA, CNAME  |
+
+```sql
+SELECT BASE64(payload), *
+FROM events
+WHERE LOGSOURCETYPENAME(devicetype) ILIKE '%DNS_logsource_type%' AND "DNS_Request_Type" ILIKE 'TXT' LAST 5 DAYS
+```
+
 
 ## 🛠 Usage
 
