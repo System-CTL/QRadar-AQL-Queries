@@ -190,6 +190,24 @@ FROM events
 WHERE LOGSOURCETYPENAME(devicetype) ILIKE '%DNS_logsource_type%' AND "DNS_Request_Type" ILIKE 'TXT' AND BASE64(payload)=TRUE LAST 5 DAYS 
 ```
 
+## 16. Common Malware Paths - Hunting
+Source : N/A <br /> 
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
+**Expected False Positive, Process Names**: MpCmdRun.exe, DismHost.exe, OpenHandleCollector.exe
+```sql
+SELECT LOGSOURCENAME(logsourceid) AS "Logsource", "Process Path" as "PATH", "Process Name" as "NAME", sourceip FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
+AND qidEventId = 4688 
+AND ( "Process Path" ILIKE '%\Temp%' or "Process Path" ILIKE '%\AppData%' or "Process Path" ILIKE '%\$Recycle.Bin%' or "Process Path" ILIKE '%\ProgramData%' or "Process Path" ILIKE '%\System Volume Information%' ) ) 
+LAST 1 DAYS
+
+```
+
+
 
 ## 🛠 Usage
 
