@@ -39,7 +39,11 @@ Source : N/A <br />
 | `STRLEN("<dns_query_field_name>")>250` | Calculate the Lenght of DNS Query and use regular expression to check DNS query greater than 250 charaters. |
 ```sql
 SELECT LOGSOURCENAME(logsourceid),sourceip, destinationip, "<dns_url_query_field_name>","DNS Error Code",STRLEN("<dns_query_field_name>") FROM events
-WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%<DNS_logsource_type>%' AND STRLEN("<dns_query_field_name>")>250 AND NOT INCIDR('192.X.X.0/20',sourceip) AND "<dns_query_field_name>" IS NOT NULL AND "<dns_query_field_name>" NOT ILIKE '%<excluded_url_1>%' AND "<dns_query_field_name>" NOT ILIKE '%<excluded_url_2>%'
+WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%<DNS_logsource_type>%'
+AND STRLEN("<dns_query_field_name>")>250 AND NOT INCIDR('192.X.X.0/20',sourceip)
+AND "<dns_query_field_name>" IS NOT NULL
+AND "<dns_query_field_name>" NOT ILIKE '%<excluded_url_1>%'
+AND "<dns_query_field_name>" NOT ILIKE '%<excluded_url_2>%'
 START PARSEDATETIME('8 day ago')
 ```
 
@@ -48,7 +52,16 @@ Source : N/A <br />
 **Author** : *Abrar Hussain* <br />
 ```sql
 SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(logsourceid) AS "LogSource Name",QIDNAME(qid) As "Event Name" ,"Process Name",sourceip AS "Source IP",sourceport AS "Source Port",destinationip AS "Destination IP",destinationport AS "Destination Port",username AS "Username","Account Name" AS "Account Name" FROM events
-WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows%' AND qidEventId=4648 AND username!="Account Name" AND username NOT LIKE '%$' AND "Account Name" NOT LIKE '%$' AND username!='-' AND "Account Name"!='-' AND username IS NOT NULL AND "Account Name" IS NOT NULL AND username NOT IN ('1st_username_exclusion') AND username NOT IN ('2nd_username_exclusion')
+WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows%'
+AND qidEventId=4648
+AND username!="Account Name"
+AND username NOT LIKE '%$'
+AND "Account Name" NOT LIKE '%$'
+AND username!='-' AND "Account Name"!='-'
+AND username IS NOT NULL
+AND "Account Name" IS NOT NULL
+AND username NOT IN ('1st_username_exclusion')
+AND username NOT IN ('2nd_username_exclusion')
 START PARSEDATETIME('1 day ago')
 ```
 
@@ -63,7 +76,11 @@ Source : N/A <br />
 | <ul><li>(sourceIP BETWEEN '10.0.0.0' AND '10.255.255.255')</li><li>(sourceIP BETWEEN '172.16.0.0' AND '172.31.255.255')</li><li>( sourceIP BETWEEN '192.168.0.0' AND '192.168.255.255')</li></ul> | Private IP Range  |
 ```sql
 SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(logsourceid) AS "LogSource Name",QIDNAME(qid) As "Event Name" ,"Logon Process" AS "Logon Process","Process Name",sourceip AS "Source IP",sourceport AS "Source Port",destinationip AS "Destination IP",destinationport AS "Destination Port",username AS "Username","Account Name" AS "Account Name", "Logon Type" AS "Logon Type" ,qideventid AS "Event ID"  FROM events
-WHERE (LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_1%' OR LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_2%')  AND  NOT (sourceIP BETWEEN '10.0.0.0' AND '10.255.255.255') AND NOT (sourceIP BETWEEN '172.16.0.0' AND '172.31.255.255') AND NOT ( sourceIP BETWEEN '192.168.0.0' AND '192.168.255.255') AND destinationport=3389
+WHERE (LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_1%' OR LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_2%')
+AND  NOT (sourceIP BETWEEN '10.0.0.0' AND '10.255.255.255')
+AND NOT (sourceIP BETWEEN '172.16.0.0' AND '172.31.255.255')
+AND NOT ( sourceIP BETWEEN '192.168.0.0' AND '192.168.255.255')
+AND destinationport=3389
 START PARSEDATETIME('20 days ago')
 ```
 
@@ -77,7 +94,11 @@ Source : N/A <br />
 
 ```sql
 SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm') AS "TimeStamp",LOGSOURCENAME(logsourceid) AS "LogSource Name",QIDNAME(qid) As "Event Name" ,"Logon Process" AS "Logon Process","Process Name",destinationip AS "Source IP",sourceport AS "Source Port",destinationip AS "Destination IP",destinationport AS "Destination Port",username AS "Username","Account Name" AS "Account Name", "Logon Type" AS "Logon Type" ,qideventid AS "Event ID"  FROM events
-WHERE (LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_1%' OR LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_2%')  AND  NOT (destinationip BETWEEN '10.0.0.0' AND '10.255.255.255') AND NOT (destinationip BETWEEN '172.16.0.0' AND '172.31.255.255') AND NOT ( destinationip BETWEEN '192.168.0.0' AND '192.168.255.255') AND destinationport=3389
+WHERE (LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_1%' OR LOGSOURCETYPENAME(deviceType) ILIKE '%Firewall_Type_Name_2%')
+AND  NOT (destinationip BETWEEN '10.0.0.0' AND '10.255.255.255')
+AND NOT (destinationip BETWEEN '172.16.0.0' AND '172.31.255.255')
+AND NOT ( destinationip BETWEEN '192.168.0.0' AND '192.168.255.255')
+AND destinationport=3389
 START PARSEDATETIME('20 days ago')
 ```
 
@@ -88,7 +109,9 @@ Source : N/A <br />
 | --- | --- |
 | `DNS_LOGSOURECE_TYPE_NAME` | Add your DNS logsource_type name here  |
 ```sql
-SELECT LOGSOURCENAME(logsourceid),sourceip, destinationip,"Requested Query" AS "DNS Query","DNS Request Type" AS "DNS Record Type", "Protocol Name" AS "Protocol", "Error Code" AS "Query Status"  FROM events WHERE (LOGSOURCENAME(logsourceid)) ILIKE '%DNS_LOGSOURECE_TYPE_NAME%' AND "Query Response Status" ILIKE '%NOERROR%' AND "DNS Request Type" ILIKE '%AXFR%'
+SELECT LOGSOURCENAME(logsourceid),sourceip, destinationip,"Requested Query" AS "DNS Query","DNS Request Type" AS "DNS Record Type", "Protocol Name" AS "Protocol", "Error Code" AS "Query Status"  FROM events WHERE (LOGSOURCENAME(logsourceid)) ILIKE '%DNS_LOGSOURECE_TYPE_NAME%'
+AND "Query Response Status" ILIKE '%NOERROR%'
+AND "DNS Request Type" ILIKE '%AXFR%'
 START PARSEDATETIME('8 day ago')
 
 ```
@@ -104,7 +127,10 @@ Source : N/A <br />
 
 ```sql
 
-SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm'),"qidEventId" as 'Event ID',"Process Name",destinationport,username,"Account Name",LOGSOURCENAME(logsourceid),sourceip, destinationip, "Process Path" FROM events WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows Log%' AND qidEventId=4688 AND "Process Name" ILIKE '%svchost.exe%' GROUP BY "Process Path"
+SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm'),"qidEventId" as 'Event ID',"Process Name",destinationport,username,"Account Name",LOGSOURCENAME(logsourceid),sourceip, destinationip, "Process Path" FROM events WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows Log%'
+AND qidEventId=4688
+AND "Process Name" ILIKE '%svchost.exe%'
+GROUP BY "Process Path"
 START PARSEDATETIME('8 day ago')
 ```
 ## 10. Svchost.exe Abused - Abnormal Parent 
@@ -120,7 +146,12 @@ Source : N/A <br />
 
 ```sql
 SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm'),"qidEventId" as 'Event ID',"Process Name",destinationport,username,"Account Name",LOGSOURCENAME(logsourceid),sourceip, destinationip, "Process Path","Parent Process Name" FROM events
-WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows%' AND qidEventId=4688 AND "Process Name" ILIKE '%svchost.exe%' AND "Parent Process Name" NOT ILIKE '%Services.exe%' AND "Parent Process Name" IS NOT NULL AND "Parent Process Name" NOT ILIKE '%MsMpEng.exe%'
+WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows%'
+AND qidEventId=4688
+AND "Process Name" ILIKE '%svchost.exe%'
+AND "Parent Process Name" NOT ILIKE '%Services.exe%'
+AND "Parent Process Name" IS NOT NULL
+AND "Parent Process Name" NOT ILIKE '%MsMpEng.exe%'
 START PARSEDATETIME('7 day ago')
 ```
 
@@ -199,7 +230,10 @@ Source : N/A <br />
 ```sql
 SELECT *
 FROM events
-WHERE LOGSOURCETYPENAME(devicetype) ILIKE '%DNS_logsource_type%' AND "DNS_Request_Type" ILIKE 'TXT' AND BASE64(payload)=TRUE LAST 5 DAYS 
+WHERE LOGSOURCETYPENAME(devicetype) ILIKE '%DNS_logsource_type%'
+AND "DNS_Request_Type" ILIKE 'TXT'
+AND BASE64(payload)=TRUE
+LAST 5 DAYS 
 ```
 
 ## 16. Common Malware Paths - Hunting
