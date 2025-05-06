@@ -258,6 +258,23 @@ LAST 1 DAYS
 
 ```
 
+## 17. Pass the Ticket - Privilege User
+Source : N/A <br /> 
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
+
+**Expected False Positive**: The tickets might be cahched which might not generate 4768 event ID.
+```sql
+SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm'),qidEventId,username,"Account Name",sourceip,destinationip,"Hostname",LOGSOURCENAME(logsourceid) FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
+AND qidEventId=4769 
+AND qidEventId!=4768 ) AND username ILIKE 'Administrator' 
+LAST 5 DAYS
+```
+
 
 
 ## 🛠 Usage
