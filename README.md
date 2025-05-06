@@ -247,6 +247,7 @@ Source : N/A <br />
 | Parameters | Description |
 | --- | --- |
 | `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
+
 **Expected False Positive, Process Names**: MpCmdRun.exe, DismHost.exe, OpenHandleCollector.exe
 ```sql
 SELECT LOGSOURCENAME(logsourceid) AS "Logsource", "Process Path" as "PATH", "Process Name" as "NAME", sourceip FROM events 
