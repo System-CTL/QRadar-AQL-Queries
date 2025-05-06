@@ -109,7 +109,9 @@ Source : N/A <br />
 | --- | --- |
 | `DNS_LOGSOURECE_TYPE_NAME` | Add your DNS logsource_type name here  |
 ```sql
-SELECT LOGSOURCENAME(logsourceid),sourceip, destinationip,"Requested Query" AS "DNS Query","DNS Request Type" AS "DNS Record Type", "Protocol Name" AS "Protocol", "Error Code" AS "Query Status"  FROM events WHERE (LOGSOURCENAME(logsourceid)) ILIKE '%DNS_LOGSOURECE_TYPE_NAME%'
+SELECT LOGSOURCENAME(logsourceid),sourceip, destinationip,"Requested Query" AS "DNS Query","DNS Request Type" AS "DNS Record Type", "Protocol Name" AS "Protocol", "Error Code" AS "Query Status"
+FROM events
+WHERE (LOGSOURCENAME(logsourceid)) ILIKE '%DNS_LOGSOURECE_TYPE_NAME%'
 AND "Query Response Status" ILIKE '%NOERROR%'
 AND "DNS Request Type" ILIKE '%AXFR%'
 START PARSEDATETIME('8 day ago')
@@ -127,7 +129,9 @@ Source : N/A <br />
 
 ```sql
 
-SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm'),"qidEventId" as 'Event ID',"Process Name",destinationport,username,"Account Name",LOGSOURCENAME(logsourceid),sourceip, destinationip, "Process Path" FROM events WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows Log%'
+SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm'),"qidEventId" as 'Event ID',"Process Name",destinationport,username,"Account Name",LOGSOURCENAME(logsourceid),sourceip, destinationip, "Process Path"
+FROM events
+WHERE (LOGSOURCETYPENAME(devicetype)) ILIKE '%Microsoft Windows Log%'
 AND qidEventId=4688
 AND "Process Name" ILIKE '%svchost.exe%'
 GROUP BY "Process Path"
