@@ -274,8 +274,24 @@ AND qidEventId=4769
 AND qidEventId!=4768 ) AND username ILIKE 'Administrator' 
 LAST 5 DAYS
 ```
+## 18. Suspicious Powershell - Commandline
+Source : N/A <br /> 
+**Author** : *Abrar Hussain* <br />
 
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
 
+**Expected False Positive**: You might see the Microsoft Defender large commandlines with mentioned commandline keywords.
+```sql
+
+SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm'), Command ,qidEventId,username,"Account Name",sourceip,destinationip,"Hostname",LOGSOURCENAME(logsourceid) FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Security Event Log%' 
+AND "Process Name" ILIKE '%powershell.exe%'
+AND ("Command" ILIKE '% -Ex%' OR "Command" ILIKE '%IEX%' OR "Command" ILIKE '%Net.WebClient%' OR "Command" ILIKE '%New-Object  %' OR "Command" ILIKE '% -W%' OR "Command" ILIKE '% h%')) 
+GROUP BY command
+LAST 2 DAYS
+```
 
 ## 🛠 Usage
 
