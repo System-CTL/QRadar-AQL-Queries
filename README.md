@@ -293,6 +293,27 @@ GROUP BY command
 LAST 2 DAYS
 ```
 
+## 18. Detection CVE_2025_53770 - WAF
+Source : https://github.com/Neo23x0/signature-base/blob/master/yara/expl_sharepoint_jul25.yar <br /> 
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `WAF_LogSource` | Add your WAF logsource_type name here  |
+**Expected True Positive**: Focused on POST requests
+
+**Expected False Positive**: Ignore the private IP addresses to access the SignOut.aspx
+```sql
+
+
+SELECT DATEFORMAT(devicetime,'yyyy-MM-dd hh:mm'),qideventid AS "Event Name","Target Application","URI","Response Code","Response Status"," HTTP Method","User Agent",sourceip,destinationip,LOGSOURCENAME(logsourceid) FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%WAF_LogSource%' 
+AND ("Request_Method" ILIKE '%POST%' OR "RequestMethod" ILIKE '%GET%')
+AND ("URI" ILIKE '%15/ToolPane.aspx%' OR "URI" ILIKE '%DisplayMode=Edit&a=/ToolPane.aspx%' OR "URI" ILIKE '%/15/spinstall0.aspx%' OR "URI" ILIKE '%/SignOut.aspx%'  OR "URI" ILIKE '%App_Web_spinstall0.aspx%'  OR "URI" ILIKE '%spinstall0%'))
+LAST 1 DAYS 
+```
+
+
 ## 🛠 Usage
 
 1. Copy the desired AQL query
