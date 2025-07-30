@@ -293,7 +293,7 @@ GROUP BY command
 LAST 2 DAYS
 ```
 
-## 18. Detection CVE_2025_53770 - WAF
+## 19. Detection CVE_2025_53770 - WAF
 Source : https://github.com/Neo23x0/signature-base/blob/master/yara/expl_sharepoint_jul25.yar <br /> 
 **Author** : *Abrar Hussain* <br />
 
@@ -313,6 +313,20 @@ AND ("URI" ILIKE '%15/ToolPane.aspx%' OR "URI" ILIKE '%DisplayMode=Edit&a=/ToolP
 LAST 1 DAYS 
 ```
 
+## 20.LogSourceTypes EPS - Qradar
+Source : https://www.ibm.com/docs/en/qradar-common?topic=cwfads-sample-event-log-source-storage-usage-aql-statements#reference_fsw_c3k_pbb__log_source_summary__title__1 <br /> 
+**Author** : *Abrar Hussain* <br />
+
+```sql
+
+SELECT LOGSOURCETYPENAME(devicetype) AS "LogSourceType",UNIQUECOUNT(logsourceid) as "Number of Log Sources",
+COUNT(*)/3600 as "EPS",(DOUBLE(COUNT(isunparsed)) / COUNT(*)) * 100 AS "PercentUnparsed" 
+FROM events 
+GROUP BY devicetype 
+ORDER BY "PercentUnparsed" 
+DESC 
+LAST 36 HOURS
+```
 
 ## 🛠 Usage
 
