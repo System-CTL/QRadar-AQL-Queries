@@ -328,6 +328,54 @@ DESC
 LAST 36 HOURS
 ```
 
+## 21.Internal Proxy Configured - Registry Modified - NETSH
+
+Source : https://www.volexity.com/blog/2024/11/22/the-nearest-neighbor-attack-how-a-russian-apt-weaponized-nearby-wi-fi-networks-for-covert-access/
+
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
+| `Object` | Add Registry Full Path Field here  |
+
+**Investigation Notes**: Correlate with EID 1 or 4688 and Look for NETSH.exe events 
+```sql
+
+SELECT LOGSOURCENAME(logsourceid) AS "Logsource", "Process Path" as "PATH", "Process Name" as "NAME", sourceip FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
+AND qidEventId = 4657 AND ("Object" ILIKE '%PortProxy%' OR "Object" ILIKE '%v4tov4%') )
+LAST 1 DAYS
+
+```
+
+## 22.Disables remote User Account Control(UAC)  - Suspected Defense Evasion
+
+Source : https://unit42.paloaltonetworks.com/unit42-shamoon-2-return-disttrack-wiper/
+
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
+| `Object` | Add Registry Full Path Field here  |
+
+**Expected True Positive**: Registry key value is "1" <br />
+**Investigation Notes**: Correlate with EID 1 or 4688 and Look for reg.exe events
+```sql
+
+SELECT LOGSOURCENAME(logsourceid) AS "Logsource", "Process Path" as "PATH", "Process Name" as "NAME", sourceip FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
+AND qidEventId = 4657 AND ("Object" ILIKE '%LocalAccountTokenFilterPolicy%') )
+LAST 7 DAYS
+
+```
+
+
+
+
+
+
 ## 🛠 Usage
 
 1. Copy the desired AQL query
