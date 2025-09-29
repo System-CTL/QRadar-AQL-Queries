@@ -371,6 +371,56 @@ LAST 7 DAYS
 
 ```
 
+## 23.RDP Hijacking  - tscon
+
+Source : https://www.korznikov.com/2017/03/0-day-or-feature-privilege-escalation.html
+
+
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
+| `Process Path` | Replace as per your custom field here  |
+| `Command` | Replace as per your custom field here  |
+
+```sql
+
+SELECT LOGSOURCENAME(logsourceid) AS "Logsource", "Process Path" as "PATH", "Process Name" as "Process Name","Command", sourceip FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
+AND qidEventId = 4688
+AND "Process Path" ILIKE '%tscon.exe%'
+OR ("Command" ILIKE '%noconsentPrompt%' OR "Command" ILIKE '%shadow:%' OR "Command" ILIKE '%tscon%') )
+LAST 7 DAYS
+
+```
+
+## 24.LOLBIN  - CERTUTIL DETECTION
+
+Source : https://lolbas-project.github.io/lolbas/Binaries/Certutil/
+
+
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
+| `Process Name` | Replace as per your custom field here  |
+| `Command` | Replace as per your custom field here  |
+
+```sql
+
+
+SELECT LOGSOURCENAME(logsourceid) AS "Logsource", "Process Path" as "PATH", "Process Name" as "Process Name","Command", sourceip FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
+AND qidEventId = 4688
+AND ("Process Name" ILIKE '%certutil.exe%' )
+AND ("Command" ILIKE '%urlcache%' OR "Command" ILIKE '%URL%' OR "Command" ILIKE '%verifyctl%' OR "Command" ILIKE '%-exportPFX%' OR "Command" ILIKE '%decode%' ) )
+LAST 7 DAYS
+
+
+
+```
 
 
 
