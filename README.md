@@ -248,13 +248,15 @@ Source : N/A <br />
 | --- | --- |
 | `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
 
-**Expected False Positive, Process Names**: MpCmdRun.exe, DismHost.exe, OpenHandleCollector.exe
+**Expected False Positive, Process Names**: MpCmdRun.exe, DismHost.exe, OpenHandleCollector.exe, whitelist the approved process names
 ```sql
-SELECT LOGSOURCENAME(logsourceid) AS "Logsource", "Process Path" as "PATH", "Process Name" as "NAME", sourceip FROM events 
+SELECT LOGSOURCENAME(logsourceid) AS "Logsource", "Process Path" as "PROCESS PATH", "Process Name" as "PROCESS NAME", COMMAND as "COMMAND", sourceip FROM events 
 WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
 AND qidEventId = 4688 
-AND ( "Process Path" ILIKE '%\Temp%' or "Process Path" ILIKE '%\AppData%' or "Process Path" ILIKE '%\$Recycle.Bin%' or "Process Path" ILIKE '%\ProgramData%' or "Process Path" ILIKE '%\System Volume Information%' ) ) 
+AND ( "Process Path" ILIKE '%\Temp%' or "Process Path" ILIKE '%\AppData%' or "Process Path" ILIKE '%\$Recycle.Bin%' or "Process Path" ILIKE '%\ProgramData%' or "Process Path" ILIKE '%\System Volume Information%' or "Process Path" ILIKE '%\Windows%' or "Process Path" ILIKE '%\program files%' or "Process Path" ILIKE '%\winsxs%'  ) AND NOT ( "Process Name" ILIKE '%DismHost.exe%' AND "Process Name" ILIKE '%MpCmdRun.exe%' ) )
+GROUP BY "Process Path"
 LAST 1 DAYS
+
 
 ```
 
@@ -421,6 +423,9 @@ LAST 7 DAYS
 
 
 ```
+
+
+
 
 
 
