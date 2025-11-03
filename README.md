@@ -423,10 +423,30 @@ LAST 7 DAYS
 
 
 ```
+## 25.RDP Authentication from outside  - Logon Type 10
+
+Source : https://thedfirreport.com/2025/06/30/hide-your-rdp-password-spray-leads-to-ransomhub-deployment/
+
+**Author** : *Abrar Hussain* <br />
+
+| Parameters | Description |
+| --- | --- |
+| `Microsoft Windows Security Event Log` | Add your Microsoft Windows Security logsource_type name here  |
 
 
+```sql
 
+SELECT LOGSOURCENAME(logsourceid) AS "Logsource", "Process Path" as "PATH", "Process Name" as "Process Name","Command", sourceip
+FROM events 
+WHERE (LOGSOURCETYPENAME(devicetype) ILIKE '%Microsoft Windows Security Event Log%' 
+AND qidEventId = 4624
+AND "Logon Type" ILIKE '%10%'  
+AND  NOT (sourceIP BETWEEN '10.0.0.0' AND '10.255.255.255')
+AND NOT (sourceIP BETWEEN '172.16.0.0' AND '172.31.255.255')
+AND NOT ( sourceIP BETWEEN '192.168.0.0' AND '192.168.255.255') )
+LAST 3 DAYS
 
+```
 
 
 
